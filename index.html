@@ -40,15 +40,11 @@
                     </div>
                     <ul tabindex="0"
                         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li><a>Item 1</a></li>
-                        <li>
-                            <a>Parent</a>
-                            <ul class="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </li>
-                        <li><a>Item 3</a></li>
+                        <button class="btn btn-outline "><i class="fa-solid fa-circle-question"></i>
+                            FAQ</button>
+                        <button class="btn btn-outline "><i class="fa-solid fa-book-open"></i> Learn</button>
+                        <button class="btn btn-outline "><i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Logout</button>
                     </ul>
                 </div>
                 <a class="btn btn-ghost text-xl">English <img src="assets/logo.png" alt=""> জানালা</a>
@@ -89,6 +85,10 @@
 
         </section>
 
+        <section id="spinner" class="flex justify-center items-center py-10 hidden">
+            <span class="loading loading-spinner loading-xl"></span>
+        </section>
+        
         <section id="word-container" class="grid grid-cols-3 gap-10 bg-gray-100 p-10 w-11/12 mx-auto rounded-2xl mt-8">
 
 
@@ -98,8 +98,26 @@
             </div>
         </section>
 
-    </main>
 
+
+        <!-- Open the modal using ID.showModal() method -->
+        <!-- <button class="btn" onclick="my_modal_5.showModal()">open modal</button> -->
+        <dialog id="detail_modal" class="modal modal-bottom sm:modal-middle">
+            <div class="modal-box">
+                <div id="details-container" class="space-y-5">
+                   
+                </div>
+                <div class="modal-action">
+                    <form method="dialog">
+                        <!-- if there is a button in form, it will close the modal -->
+                        <button class="btn">Close</button>
+                    </form>
+                </div>
+            </div>
+        </dialog>
+
+
+    </main>
 
 
     <script src="script/index.js"></script>

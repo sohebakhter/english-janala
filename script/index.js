@@ -1,3 +1,18 @@
+const createElement = (arr) => {
+    const htmlElements = arr.map(el => `<span class= "btn">${el}</span>`)
+    return (htmlElements.join());
+}
+
+const manageSpinner = (status) => {
+    if (status == true) {
+        document.getElementById('spinner').classList.remove('hidden')
+        document.getElementById('word-container').classList.add('hidden')
+    } else {
+        document.getElementById('word-container').classList.remove('hidden')
+        document.getElementById('spinner').classList.add('hidden')
+    }
+}
+
 const loadLessons = () => {
     fetch('https://openapi.programming-hero.com/api/levels/all')
         .then(res => res.json())
@@ -6,10 +21,11 @@ const loadLessons = () => {
 
 const removeActive = () => {
     const lessonButtons = document.querySelectorAll('.lesson-btn')
-    lessonButtons.forEach(btn=> btn.classList.remove('চালু'))
+    lessonButtons.forEach(btn => btn.classList.remove('চালু'))
 }
 
 const loadWordLevel = (id) => {
+    manageSpinner(true);
     const url = (`https://openapi.programming-hero.com/api/level/${id}`)
     fetch(url)
         .then(res => res.json())
@@ -22,6 +38,61 @@ const loadWordLevel = (id) => {
 
 }
 
+const loadWordDetail = (id) => {
+    const url = `https://openapi.programming-hero.com/api/word/${id}`
+    fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            displayWordDetail(json.data)
+        })
+}
+
+// {
+//     "word": "Meager",
+//     "meaning": "অত্যল্প / নগণ্য",
+//     "pronunciation": "মীগার",
+//     "level": 3,
+//     "sentence": "The workers received a meager salary for their hard work.",
+//     "points": 3,
+//     "partsOfSpeech": "adjective",
+//     "synonyms": [
+//         "scanty",
+//         "insufficient",
+//         "paltry"
+//     ],
+//     "id": 63
+// }
+
+const displayWordDetail = (details) => {
+    console.log(details);
+
+    const detailsContainer = document.getElementById('details-container')
+    detailsContainer.innerHTML = `
+    
+         <div class="">
+                        <h2 class="font-semibold text-2xl">${details.word} (<i class="fa-solid fa-microphone-lines"></i> :${details.pronunciation})
+                        </h2>
+                    </div>
+                    <div class="">
+                        <p class="font-medium text-xl">Meaning</p>
+                        <p>${details.meaning}</p>
+                    </div>
+                    <div class="">
+                        <p class="font-medium text-xl">Example</p>
+                        <p>${details.sentence}</p>
+                    </div>
+                    <div class="">
+                        <p class="font-medium text-xl">সমার্থক শব্দ গুলো</p>
+                        <div class="">${createElement(details.synonyms)}
+                        </div>
+                    </div>
+
+    
+    `
+    document.getElementById('detail_modal').showModal()
+
+
+}
 
 const displayWordLevel = (words) => {
     const wordContainer = document.getElementById('word-container')
@@ -37,6 +108,15 @@ const displayWordLevel = (words) => {
             </div>
         `
     }
+
+    // {
+    // "id": 4,
+    // "level": 5,
+    // "word": "Diligent",
+    // "meaning": "পরিশ্রমী",
+    // "pronunciation": "ডিলিজেন্ট"
+    // }
+
     // এখানে কিছু জিনিস empty থাকায় conditional rendaring / ? এইটা নিয়ে কাজ করা হয়েছে
     for (const word of words) {
         const wordDiv = document.createElement('div')
@@ -47,7 +127,7 @@ const displayWordLevel = (words) => {
                 <p>Meaning /Pronounciation</p> 
                 <p class="font-medium text-2xl font-bangla">"${word.meaning ? word.meaning : 'অর্থ পাওয়া যায়নি'} / ${word.pronunciation ? word.pronunciation : 'উচ্চারণ পাওয়া যায়নি'}"</p>
                 <div class="flex justify-between ">
-                    <button class="btn btn-square hover:bg-[#1A91FF60] bg-[#1A91FF10]">
+                    <button onclick="loadWordDetail(${word.id})" class="btn btn-square hover:bg-[#1A91FF60] bg-[#1A91FF10]">
                         <i class="fa-solid fa-circle-info"></i>
                     </button>
                     <button class="btn btn-square hover:bg-[#1A91FF60] bg-[#1A91FF10]">
@@ -59,6 +139,7 @@ const displayWordLevel = (words) => {
     `
         wordContainer.appendChild(wordDiv)
     }
+    manageSpinner(false);
 
 }
 
